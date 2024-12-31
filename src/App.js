@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
 
-function App() {
+const SelectInventoryPage = React.lazy(() =>import("./pages/SelectInventoryPage"));
+const AddInventoryPage = React.lazy(() => import("./pages/AddInventoryPage"));
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="min-h-screen bg-gray-100">
+      {/* Wrap Routes in Suspense to handle loading state */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<SelectInventoryPage />} />
+          <Route path="/add-inventory" element={<AddInventoryPage />} />
+        </Routes>
+      </Suspense>
     </div>
   );
-}
+};
 
 export default App;
