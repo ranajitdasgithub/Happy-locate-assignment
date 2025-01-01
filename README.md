@@ -1,3 +1,4 @@
+```md
 project-root/
 │
 ├── public/
@@ -48,3 +49,4 @@ project-root/
 ├── package.json
 ├── tailwind.config.js
 └── README.md
+```

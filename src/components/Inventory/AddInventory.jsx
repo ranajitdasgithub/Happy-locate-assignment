@@ -1,16 +1,26 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import SearchIcon from "@mui/icons-material/Search";
 
 const AddInventory = () => {
   const [items, setItems] = useState([
-    { name: "Washing Machine", count: 0 },
-    { name: "Sofa Chair", count: 0 },
-    { name: "Refrigerator", count: 0 },
-    { name: "Bed", count: 0 },
-    { name: "Smart TV", count: 0 },
-    { name: "Sofa Set", count: 0 },
+    { name: "Washing Machine", category: "Electrical Appliances", count: 0 },
+    { name: "Sofa Chair", category: "Furniture", count: 0 },
+    { name: "Refrigerator", category: "Electrical Appliances", count: 0 },
+    { name: "Bed", category: "Furniture", count: 0 },
+    { name: "Smart TV", category: "Electronics", count: 0 },
+    { name: "Sofa Set", category: "Furniture", count: 0 },
   ]);
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const categories = [
+    "All",
+    "Electrical Appliances",
+    "Furniture",
+    "Electronics",
+  ];
 
   const handleAdd = (index) => {
     setItems((prevItems) =>
@@ -28,45 +38,95 @@ const AddInventory = () => {
     );
   };
 
+  const getCategoryCount = (category) => {
+    return items.filter(
+      (item) =>
+        (category === "All" || item.category === category) &&
+        item.name.toLowerCase().includes(search.toLowerCase())
+    ).length;
+  };
+
+  const filteredItems = items.filter(
+    (item) =>
+      (activeCategory === "All" || item.category === activeCategory) &&
+      item.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="p-4">
+      {/* Search Bar */}
+      <div className="flex items-center bg-gray-100 p-3 rounded-md mb-4">
+        <SearchIcon className="text-gray-400 mr-2" />
+        <input
+          type="text"
+          placeholder="Search for items"
+          className="flex-grow bg-transparent outline-none"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      {/* Category Tabs */}
+      <div className="flex overflow-x-auto mb-2">
+        {categories.map((category, index) => (
+          <button
+            key={category}
+            className={`py-2 rounded-md whitespace-nowrap ${
+              index === 0 ? "pl-0" : "ml-6"
+            } ${
+              activeCategory === category ? "text-blue-500" : "text-gray-700"
+            }`}
+            onClick={() => setActiveCategory(category)}
+          >
+            {category} {getCategoryCount(category)}
+          </button>
+        ))}
+      </div>
+
+      {/* Items Grid */}
       <div className="grid grid-cols-2 gap-4">
-        {items.map((item, index) => (
+        {filteredItems.map((item, index) => (
           <div
             key={index}
-            className="bg-white rounded-md shadow-md p-4 flex flex-col items-center"
+            className="bg-white rounded-md shadow-md p-0 flex flex-col"
           >
-            {/* Placeholder Image */}
-            <div className="w-full h-32 bg-gray-200 rounded-md mb-4"></div>
-            <h3 className="text-gray-700 font-medium mb-2">{item.name}</h3>
-            {item.count > 0 ? (
-              <div className="flex items-center gap-2">
-                {/* Remove Button */}
+            {/* Full-width Placeholder Image */}
+            <div className="w-full h-24 bg-gray-200 rounded-t-md"></div>
+
+            {/* Item Name and Buttons */}
+            <div className="flex items-center justify-between p-2 whitespace-nowrap">
+              <h3 className="text-gray-700 font-bold text-xs truncate">
+                {item.name}
+              </h3>
+              {item.count > 0 ? (
+                <div className="flex items-center gap-[2px]">
+                  {/* Remove Button */}
+                  <button
+                    className="w-5 h-5 flex items-center justify-center border border-blue-500 text-blue-500 rounded-full"
+                    onClick={() => handleRemove(index)}
+                  >
+                    <RemoveIcon style={{ fontSize: "12px" }} />
+                  </button>
+                  <span className="text-blue-500 font-bold text-[10px] text-center min-w-[16px]">
+                    {item.count}
+                  </span>
+                  {/* Add Button */}
+                  <button
+                    className="w-5 h-5 flex items-center justify-center border border-blue-500 text-blue-500 rounded-full"
+                    onClick={() => handleAdd(index)}
+                  >
+                    <AddIcon style={{ fontSize: "12px" }} />
+                  </button>
+                </div>
+              ) : (
                 <button
-                  className="w-8 h-8 flex items-center justify-center border-2 border-blue-500 text-blue-500 rounded-full"
-                  onClick={() => handleRemove(index)}
-                >
-                  <RemoveIcon fontSize="small" />
-                </button>
-                <span className="text-blue-500 font-bold text-center min-w-[24px]">
-                  {item.count}
-                </span>
-                {/* Add Button */}
-                <button
-                  className="w-8 h-8 flex items-center justify-center border-2 border-blue-500 text-blue-500 rounded-full"
+                  className="text-blue-500 font-bold text-[10px]"
                   onClick={() => handleAdd(index)}
                 >
-                  <AddIcon fontSize="small" />
+                  Add
                 </button>
-              </div>
-            ) : (
-              <button
-                className="text-blue-500 font-medium"
-                onClick={() => handleAdd(index)}
-              >
-                Add
-              </button>
-            )}
+              )}
+            </div>
           </div>
         ))}
       </div>

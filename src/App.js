@@ -1,7 +1,9 @@
 import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
-const SelectInventoryPage = React.lazy(() =>import("./pages/SelectInventoryPage"));
+const SelectInventoryPage = React.lazy(() =>
+  import("./pages/SelectInventoryPage")
+);
 const AddInventoryPage = React.lazy(() => import("./pages/AddInventoryPage"));
 
 const App = () => {
@@ -11,7 +13,7 @@ const App = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<SelectInventoryPage />} />
-          <Route path="/add-inventory" element={<AddInventoryPage />} />
+          <Route path="/inventory" element={<AddInventoryPage />} />
         </Routes>
       </Suspense>
     </div>
