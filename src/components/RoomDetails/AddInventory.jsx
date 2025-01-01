@@ -1,23 +1,28 @@
-// src/components/Inventory/AddInventory.jsx
-import React from "react";
+import React, { useEffect, memo } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import SearchBar from "../common/SearchBar";
-import useInventoryManagement from "../../hooks/useInventoryManagement";
+import useInventoryManagement from "../../hooks/InventoryManagementHook/useInventoryManagement";
 
-const AddInventory = () => {
+const AddInventory = ({ onTotalCountChange }) => {
   const {
-    items,
+    filteredItems,
+    categories,
     search,
     activeCategory,
-    categories,
     handleAdd,
     handleRemove,
     getCategoryCount,
-    filteredItems,
     handleSearchChange,
-    setActiveCategory,
+    handleCategoryChange,
+    getTotalCounts,
   } = useInventoryManagement();
+
+  useEffect(() => {
+    if (onTotalCountChange) {
+      onTotalCountChange(getTotalCounts);
+    }
+  }, [getTotalCounts]);
 
   return (
     <div className="w-full">
@@ -34,7 +39,7 @@ const AddInventory = () => {
             } ${
               activeCategory === category ? "text-blue-500" : "text-gray-700"
             }`}
-            onClick={() => setActiveCategory(category)}
+            onClick={() => handleCategoryChange(category)}
           >
             {category} {getCategoryCount(category)}
           </button>
@@ -43,9 +48,9 @@ const AddInventory = () => {
 
       {/* Items Grid */}
       <div className="grid grid-cols-2 gap-4">
-        {filteredItems.map((item, index) => (
+        {filteredItems.map((item) => (
           <div
-            key={index}
+            key={item.name}
             className="bg-white rounded-md shadow-md p-0 flex flex-col"
           >
             {/* Full-width Placeholder Image */}
@@ -61,7 +66,7 @@ const AddInventory = () => {
                   {/* Remove Button */}
                   <button
                     className="w-5 h-5 flex items-center justify-center border border-blue-500 text-blue-500 rounded-full"
-                    onClick={() => handleRemove(index)}
+                    onClick={() => handleRemove(item.name)}
                   >
                     <RemoveIcon style={{ fontSize: "12px" }} />
                   </button>
@@ -71,7 +76,7 @@ const AddInventory = () => {
                   {/* Add Button */}
                   <button
                     className="w-5 h-5 flex items-center justify-center border border-blue-500 text-blue-500 rounded-full"
-                    onClick={() => handleAdd(index)}
+                    onClick={() => handleAdd(item.name)}
                   >
                     <AddIcon style={{ fontSize: "12px" }} />
                   </button>
@@ -79,7 +84,7 @@ const AddInventory = () => {
               ) : (
                 <button
                   className="text-blue-500 font-bold text-[10px]"
-                  onClick={() => handleAdd(index)}
+                  onClick={() => handleAdd(item.name)}
                 >
                   Add
                 </button>
@@ -92,4 +97,11 @@ const AddInventory = () => {
   );
 };
 
-export default AddInventory;
+// Wrap the AddInventory component with React.memo to optimize rendering
+export default memo(AddInventory, (prevProps, nextProps) => {
+  // Check if filteredItems or onTotalCountChange prop changes, if not, return true to skip re-render
+  return (
+    prevProps.filteredItems === nextProps.filteredItems &&
+    prevProps.onTotalCountChange === nextProps.onTotalCountChange
+  );
+});

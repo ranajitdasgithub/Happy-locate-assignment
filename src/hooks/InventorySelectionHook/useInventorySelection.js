@@ -1,10 +1,10 @@
 // src/hooks/useInventorySelection.js
 import { useDispatch, useSelector } from "react-redux";
-import { appActions } from "../redux/app-slice";
+import { appActions } from "../../redux/app-slice";
 
 const useInventorySelection = () => {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.inventoryDetails.room);
+  const items = useSelector((state) => state.app.inventoryDetails.room);
 
   const updateItemCount = (id, increment) => {
     const updatedItems = items.map((item) =>

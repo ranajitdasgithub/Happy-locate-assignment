@@ -2,7 +2,7 @@
 import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import useInventorySelection from "../../hooks/useInventorySelection";
+import useInventorySelection from "../../hooks/InventorySelectionHook/useInventorySelection";
 
 const SelectInventory = () => {
   const { items, updateItemCount } = useInventorySelection();

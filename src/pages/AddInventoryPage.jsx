@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../components/Layout/Header";
 import TabsNavigation from "../components/Layout/TabsNavigation";
 import Footer from "../components/Layout/Footer";
-import AddInventory from "../components/Inventory/AddInventory";
+import AddInventory from "../components/RoomDetails/AddInventory";
 import { useNavigate } from "react-router-dom";
 import RoomAccordionManager from "../components/RoomDetails/RoomAccordionManager";
 

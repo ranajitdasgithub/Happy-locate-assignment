@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import AddInventory from "../Inventory/AddInventory";
+import AddInventory from "./AddInventory";
 import { useSelector } from "react-redux";
 
 const RoomAccordionManager = () => {
   const [expanded, setExpanded] = useState(false);
-  const roomWiseData = useSelector((state) => state.inventoryDetails.room);
+
+  // Use an object to track totalCount for each room
+  const [roomCounts, setRoomCounts] = useState({});
+
+  const roomWiseData = useSelector((state) => state.app.inventoryDetails.room);
 
   // Flatten the roomWiseData into individual entries based on the value
   const data = roomWiseData.flatMap((room) =>
@@ -18,6 +22,13 @@ const RoomAccordionManager = () => {
 
   const handleAccordionChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+  };
+
+  const handleTotalCountChange = (newTotal, roomName) => {
+    setRoomCounts((prevCounts) => ({
+      ...prevCounts,
+      [roomName]: newTotal,
+    }));
   };
 
   return (
@@ -32,11 +43,18 @@ const RoomAccordionManager = () => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <div className="flex w-full">
               <span className="font-semibold">{room.name}</span>
-              <span className="text-blue-500 text-xs flex items-center ml-4">{`Item Added ${room.items.length}`}</span>
+              {/* Display the total count for the specific room */}
+              <span className="text-blue-500 text-xs flex items-center ml-4">
+                {`Item Added ${roomCounts[room.name] || 0}`}
+              </span>
             </div>
           </AccordionSummary>
           <AccordionDetails className="w-full">
-            <AddInventory />
+            <AddInventory
+              onTotalCountChange={(newTotal) =>
+                handleTotalCountChange(newTotal, room.name)
+              } // Pass room's name
+            />
           </AccordionDetails>
         </Accordion>
       ))}
