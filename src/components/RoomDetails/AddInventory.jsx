@@ -1,10 +1,12 @@
-import React, { useEffect, memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import SearchBar from "../common/SearchBar";
 import useInventoryManagement from "../../hooks/InventoryManagementHook/useInventoryManagement";
+import { RemoveModal } from "../Modals/RemoveModal/RemoveModal";
+import LazyImage from "../common/LazyImage";
 
-const AddInventory = ({ onTotalCountChange }) => {
+const AddInventory = ({ onTotalCountChange, roomName }) => {
   const {
     filteredItems,
     categories,
@@ -16,13 +18,44 @@ const AddInventory = ({ onTotalCountChange }) => {
     handleSearchChange,
     handleCategoryChange,
     getTotalCounts,
+    handleRoomChange,
   } = useInventoryManagement();
+  const [openModal, setOpenModal] = useState(false);
+  const [itemToRemove, setItemToRemove] = useState(null);
 
+  // Load persisted state for the room on mount
+  useEffect(() => {
+    if (handleRoomChange) {
+      handleRoomChange(roomName);
+    }
+  }, [handleRoomChange]);
+
+  // Update total count for the room whenever the count changes
   useEffect(() => {
     if (onTotalCountChange) {
       onTotalCountChange(getTotalCounts);
     }
   }, [getTotalCounts]);
+
+  // Open modal when trying to remove an item with count of 1
+  const handleItemRemoveClick = (item) => {
+    if (item.count === 1) {
+      setItemToRemove(item);
+      setOpenModal(true);
+    } else {
+      handleRemove(item.name);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setItemToRemove(null);
+  };
+
+  const handleRemoveFromModal = () => {
+    handleRemove(itemToRemove.name);
+    handleCloseModal();
+  };
 
   return (
     <div className="w-full">
@@ -54,7 +87,14 @@ const AddInventory = ({ onTotalCountChange }) => {
             className="bg-white rounded-md shadow-md p-0 flex flex-col"
           >
             {/* Full-width Placeholder Image */}
-            <div className="w-full h-24 bg-gray-200 rounded-t-md"></div>
+            <div className="w-full h-24 bg-gray-200 rounded-t-md">
+              <LazyImage
+                src={`/images/${item.image}`} // Actual image path
+                alt={item.name}
+                className="w-full h-full object-cover rounded-t-md" // Apply object-cover to ensure the image stays contained
+                placeholderSrc="/path/to/placeholder-image.jpg" // Fallback image
+              />
+            </div>
 
             {/* Item Name and Buttons */}
             <div className="flex items-center justify-between p-2 whitespace-nowrap">
@@ -66,7 +106,7 @@ const AddInventory = ({ onTotalCountChange }) => {
                   {/* Remove Button */}
                   <button
                     className="w-5 h-5 flex items-center justify-center border border-blue-500 text-blue-500 rounded-full"
-                    onClick={() => handleRemove(item.name)}
+                    onClick={() => handleItemRemoveClick(item)}
                   >
                     <RemoveIcon style={{ fontSize: "12px" }} />
                   </button>
@@ -93,13 +133,22 @@ const AddInventory = ({ onTotalCountChange }) => {
           </div>
         ))}
       </div>
+
+      {/* Remove Modal */}
+      {openModal && (
+        <RemoveModal
+          open={openModal}
+          setOpen={handleCloseModal}
+          onRemove={handleRemoveFromModal}
+          itemName={itemToRemove.name}
+        />
+      )}
     </div>
   );
 };
 
 // Wrap the AddInventory component with React.memo to optimize rendering
 export default memo(AddInventory, (prevProps, nextProps) => {
-  // Check if filteredItems or onTotalCountChange prop changes, if not, return true to skip re-render
   return (
     prevProps.filteredItems === nextProps.filteredItems &&
     prevProps.onTotalCountChange === nextProps.onTotalCountChange

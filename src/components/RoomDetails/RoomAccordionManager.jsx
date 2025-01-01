@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddInventory from "./AddInventory";
@@ -7,8 +7,11 @@ import { useSelector } from "react-redux";
 const RoomAccordionManager = () => {
   const [expanded, setExpanded] = useState(false);
 
-  // Use an object to track totalCount for each room
-  const [roomCounts, setRoomCounts] = useState({});
+  // Room Counts state
+  const [roomCounts, setRoomCounts] = useState(() => {
+    const savedCounts = sessionStorage.getItem("roomCounts");
+    return savedCounts ? JSON.parse(savedCounts) : {};
+  });
 
   const roomWiseData = useSelector((state) => state.app.inventoryDetails.room);
 
@@ -25,10 +28,14 @@ const RoomAccordionManager = () => {
   };
 
   const handleTotalCountChange = (newTotal, roomName) => {
-    setRoomCounts((prevCounts) => ({
-      ...prevCounts,
-      [roomName]: newTotal,
-    }));
+    setRoomCounts((prevCounts) => {
+      const updatedCounts = {
+        ...prevCounts,
+        [roomName]: newTotal,
+      };
+      sessionStorage.setItem("roomCounts", JSON.stringify(updatedCounts));
+      return updatedCounts;
+    });
   };
 
   return (
@@ -51,6 +58,7 @@ const RoomAccordionManager = () => {
           </AccordionSummary>
           <AccordionDetails className="w-full">
             <AddInventory
+              roomName={room.name}
               onTotalCountChange={(newTotal) =>
                 handleTotalCountChange(newTotal, room.name)
               } // Pass room's name

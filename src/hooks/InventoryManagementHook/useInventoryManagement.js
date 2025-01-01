@@ -1,17 +1,47 @@
 import { useState, useCallback, useMemo } from "react";
 
+// Function to load inventory state with default values
+const loadInventoryState = () => {
+  return {
+    items: [
+      {
+        name: "Washing Machine",
+        category: "Electrical Appliances",
+        count: 0,
+        image: "washing-machine.jpg",
+      },
+      {
+        name: "Sofa Chair",
+        category: "Furniture",
+        count: 0,
+        image: "sofa.jpg",
+      },
+      {
+        name: "Refrigerator",
+        category: "Electrical Appliances",
+        count: 0,
+        image: "refrigirator.jpg",
+      },
+      { name: "Bed", category: "Furniture", count: 0, image: "bed.jpg" },
+      {
+        name: "Smart TV",
+        category: "Electronics",
+        count: 0,
+        image: "smart-tv.jpg",
+      },
+      { name: "Sofa Set", category: "Furniture", count: 0, image: "sofa.jpg" },
+    ],
+
+    search: "",
+    activeCategory: "All",
+    roomName: "",
+  };
+};
+
 const useInventoryManagement = () => {
-  // Internal state to store items data
-  const [items, setItems] = useState([
-    { name: "Washing Machine", category: "Electrical Appliances", count: 0 },
-    { name: "Sofa Chair", category: "Furniture", count: 0 },
-    { name: "Refrigerator", category: "Electrical Appliances", count: 0 },
-    { name: "Bed", category: "Furniture", count: 0 },
-    { name: "Smart TV", category: "Electronics", count: 0 },
-    { name: "Sofa Set", category: "Furniture", count: 0 },
-  ]);
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [inventoryState, setInventoryState] = useState(loadInventoryState);
+
+  const { items, search, activeCategory } = inventoryState;
 
   const categories = [
     "All",
@@ -22,48 +52,60 @@ const useInventoryManagement = () => {
     "Gardening",
   ];
 
-  // Use useCallback for functions to prevent re-creation on each render
   const handleAdd = useCallback((name) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
+    setInventoryState((prevState) => ({
+      ...prevState,
+      items: prevState.items.map((item) =>
         item.name === name ? { ...item, count: item.count + 1 } : item
-      )
-    );
+      ),
+    }));
   }, []);
 
   const handleRemove = useCallback((name) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
+    setInventoryState((prevState) => ({
+      ...prevState,
+      items: prevState.items.map((item) =>
         item.name === name
           ? { ...item, count: Math.max(0, item.count - 1) }
           : item
-      )
-    );
+      ),
+    }));
   }, []);
 
   const handleCategoryChange = useCallback((category) => {
-    setActiveCategory(category);
+    setInventoryState((prevState) => ({
+      ...prevState,
+      activeCategory: category,
+    }));
+  }, []);
+
+  const handleRoomChange = useCallback((roomName) => {
+    setInventoryState((prevState) => ({
+      ...prevState,
+      roomName: roomName,
+    }));
   }, []);
 
   const handleSearchChange = useCallback((e) => {
-    setSearch(e.target.value);
+    const searchValue = e.target.value;
+    setInventoryState((prevState) => ({
+      ...prevState,
+      search: searchValue,
+    }));
   }, []);
 
-  // Use useMemo for derived values like filteredItems to avoid unnecessary re-calculation
   const filteredItems = useMemo(() => {
     return items.filter(
       (item) =>
         (activeCategory === "All" || item.category === activeCategory) &&
         item.name.toLowerCase().includes(search.toLowerCase())
     );
-  }, [items, search, activeCategory]); // Only re-compute when items, search, or activeCategory changes
+  }, [items, search, activeCategory]);
 
-  // Use useMemo for total counts as well
   const getTotalCounts = useMemo(() => {
     return items.reduce((total, item) => total + item.count, 0);
   }, [items]);
 
-  // Count items matching the selected category and search input
   const getCategoryCount = useCallback(
     (category) => {
       return items.filter(
@@ -73,7 +115,7 @@ const useInventoryManagement = () => {
       ).length;
     },
     [items, search]
-  ); // Re-run when items or search changes
+  );
 
   return {
     filteredItems,
@@ -86,6 +128,7 @@ const useInventoryManagement = () => {
     handleSearchChange,
     handleCategoryChange,
     getTotalCounts,
+    handleRoomChange,
   };
 };
 
