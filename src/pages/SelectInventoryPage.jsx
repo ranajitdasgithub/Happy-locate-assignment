@@ -33,7 +33,11 @@ const SelectInventoryPage = () => {
           tabs={tabs}
         />
         <div className="flex-grow">
-          <SelectInventory />
+          {selectedTab == "room" ? (
+            <SelectInventory />
+          ) : (
+            <h3 className="text-center mt-8">No Category Available</h3>
+          )}
         </div>
         <Footer handleContinue={handleContinue} />
       </div>

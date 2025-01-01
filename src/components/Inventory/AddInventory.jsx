@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import SearchIcon from "@mui/icons-material/Search";
+import SearchBar from "../common/SearchBar";
 
 const AddInventory = () => {
   const [items, setItems] = useState([
@@ -51,20 +51,13 @@ const AddInventory = () => {
       (activeCategory === "All" || item.category === activeCategory) &&
       item.name.toLowerCase().includes(search.toLowerCase())
   );
-
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
   return (
-    <div className="p-4">
+    <div className="w-full">
       {/* Search Bar */}
-      <div className="flex items-center bg-gray-100 p-3 rounded-md mb-4">
-        <SearchIcon className="text-gray-400 mr-2" />
-        <input
-          type="text"
-          placeholder="Search for items"
-          className="flex-grow bg-transparent outline-none"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      <SearchBar search={search} onChange={handleSearchChange} />
 
       {/* Category Tabs */}
       <div className="flex overflow-x-auto mb-2">

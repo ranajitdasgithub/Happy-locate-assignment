@@ -6,30 +6,10 @@ const appSlice = createSlice({
     inventoryDetails: {
       id: "inventory-0",
       room: [
-        {
-          name: "Room",
-          id: 0,
-          value: 0,
-          nodes: [],
-        },
-        {
-          name: "Kitchen",
-          id: 1,
-          value: 0,
-          nodes: [],
-        },
-        {
-          name: "Drawing Hall",
-          id: 2,
-          value: 0,
-          nodes: [],
-        },
-        {
-          name: "Dining Hall",
-          id: 3,
-          value: 0,
-          nodes: [],
-        },
+        { id: 0, name: "Rooms", value: 0, nodes: [] },
+        { id: 1, name: "Kitchen", value: 0, nodes: [] },
+        { id: 2, name: "Drawing Hall", value: 0, nodes: [] },
+        { id: 3, name: "Dining Hall", value: 0, nodes: [] },
       ],
       category: [],
       selectedTab: "room",
@@ -37,7 +17,7 @@ const appSlice = createSlice({
   },
   reducers: {
     updateInventoryDetails(state, action) {
-      state.inventoryDetails = action.payload;
+      state.inventoryDetails = { ...state.inventoryDetails, ...action.payload };
     },
   },
 });

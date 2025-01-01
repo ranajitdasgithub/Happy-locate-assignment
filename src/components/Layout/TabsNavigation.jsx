@@ -14,8 +14,7 @@ const TabsNavigation = ({ activeTab, onTabChange, tabs }) => {
             }`}
             onClick={() => onTabChange(tab)}
           >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)}{" "}
-            {/* Capitalize first letter */}
+            {tab.charAt(0).toUpperCase() + tab.slice(1)} Wise
           </button>
         ))}
       </div>

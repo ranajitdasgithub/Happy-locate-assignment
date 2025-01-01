@@ -1,28 +1,27 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import appSlice from "./features/app-slice";
-import { persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import persistReducer from "redux-persist/es/persistReducer";
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // Defaults to localStorage
+import appSlice from "./features/app-slice"; // Adjust path
 
-const rootPersistConfig = {
-  key: "happy-locate-root",
-  storage,
+// Persist Configuration
+const persistConfig = {
+  key: "root", // Key to identify the persisted data in localStorage
+  storage, // Storage engine (localStorage in this case)
 };
 
-const appPersistConfig = {
-  key: "happy-locate-app",
-  storage,
-};
+// Ensure we're wrapping `appSlice.reducer`
+const persistedReducer = persistReducer(persistConfig, appSlice.reducer);
 
-const rootReducer = combineReducers({
-  app: persistReducer(appPersistConfig, appSlice.reducer),
-});
-
+// Configure the store
 const store = configureStore({
-  reducer: persistReducer(rootPersistConfig, rootReducer),
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Avoid issues with non-serializable data in redux-persist
+    }),
 });
 
+// Create and export persistor
 const persistor = persistStore(store);
 
-export default store;
-export { persistor };
+export { store, persistor };
