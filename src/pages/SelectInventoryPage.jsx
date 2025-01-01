@@ -7,15 +7,18 @@ import { useNavigate } from "react-router-dom";
 
 const SelectInventoryPage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  function handleContinue() {
+  function handleContinueBtn() {
+    setLoading(true);
     console.log("footer continue click");
     navigate("inventory");
+    setLoading(true);
   }
   //Tab features
   const [selectedTab, setSelectedTab] = useState("room");
 
-  const tabs = ["room", "category"];
+  const tabs = ["room", "categories"];
 
   // Handle tab selection
   const handleTabChange = (tab) => {
@@ -39,7 +42,7 @@ const SelectInventoryPage = () => {
             <h3 className="text-center mt-8">No Category Available</h3>
           )}
         </div>
-        <Footer handleContinue={handleContinue} />
+        <Footer onClick={handleContinueBtn} value={0} loading={loading} />
       </div>
     </div>
   );

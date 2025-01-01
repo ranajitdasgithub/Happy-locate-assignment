@@ -23,29 +23,37 @@ module.exports = {
         "slide-down": "slideDown 0.3s ease-in-out",
         "slide-up": "slideUp 0.3s ease-in-out",
       },
-      plugins: [
-        function ({ addUtilities }) {
-          addUtilities({
-            ".custom-scrollbar": {
-              "scrollbar-width": "thin", // Firefox scrollbar
-            },
-            ".custom-scrollbar::-webkit-scrollbar": {
-              width: "6px", // Chrome, Safari scrollbar width
-            },
-            ".custom-scrollbar::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888", // Scrollbar thumb color
-              borderRadius: "10px",
-            },
-            ".custom-scrollbar::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555", // Scrollbar thumb hover color
-            },
-            ".custom-scrollbar::-webkit-scrollbar-track": {
-              backgroundColor: "#f1f1f1", // Scrollbar track color
-            },
-          });
-        },
-      ],
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        // Hide scrollbar entirely
+        ".scrollbar-hide": {
+          "-ms-overflow-style": "none", // IE and Edge
+          "scrollbar-width": "none", // Firefox
+          "&::-webkit-scrollbar": {
+            display: "none", // Chrome, Safari
+          },
+        },
+        // Custom scrollbar styling
+        ".custom-scrollbar": {
+          "scrollbar-width": "thin", // Firefox
+          "&::-webkit-scrollbar": {
+            width: "6px", // Chrome, Safari scrollbar width
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#888", // Scrollbar thumb color
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#555", // Scrollbar thumb hover color
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1", // Scrollbar track color
+          },
+        },
+      });
+    },
+  ],
 };

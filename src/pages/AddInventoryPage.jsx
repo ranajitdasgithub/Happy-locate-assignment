@@ -4,11 +4,15 @@ import TabsNavigation from "../components/Layout/TabsNavigation";
 import Footer from "../components/Layout/Footer";
 import AddInventory from "../components/Inventory/AddInventory";
 import { useNavigate } from "react-router-dom";
-import AccordionWithTabs from "../components/RoomDetails/AccordionWithTabs";
+import RoomAccordionManager from "../components/RoomDetails/RoomAccordionManager";
 
 const AddInventoryPage = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  function handleContinueBtn() {
+    console.log("continue button click from add inventory page");
+  }
   function handleBack() {
     console.log("header back click");
     navigate("/");
@@ -16,7 +20,7 @@ const AddInventoryPage = () => {
   //Tab features
   const [selectedTab, setSelectedTab] = useState("room");
 
-  const tabs = ["room", "category"];
+  const tabs = ["room", "categories"];
 
   // Handle tab selection
   const handleTabChange = (tab) => {
@@ -39,7 +43,7 @@ const AddInventoryPage = () => {
         {/* Scrollable Content */}
         <div className="overflow-y-auto flex-grow">
           {selectedTab === "room" ? (
-            <AccordionWithTabs />
+            <RoomAccordionManager />
           ) : (
             <div className="p-4">
               <AddInventory />
@@ -48,7 +52,7 @@ const AddInventoryPage = () => {
         </div>
 
         {/* Sticky Footer */}
-        <Footer />
+        <Footer onClick={handleContinueBtn} value={13} loading={loading} />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Defaults to localStorage
-import appSlice from "./features/app-slice"; // Adjust path
+import appSlice from "./app-slice"; // Adjust path
 
 // Persist Configuration
 const persistConfig = {

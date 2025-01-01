@@ -1,22 +1,11 @@
+// src/components/Inventory/SelectInventory.jsx
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { appActions } from "../../redux/features/app-slice";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import useInventorySelection from "../../hooks/useInventorySelection";
 
 const SelectInventory = () => {
-  const dispatch = useDispatch();
-  const items = useSelector((state) => state.inventoryDetails.room);
-  console.log("items", items);
-
-  const updateItemCount = (id, increment) => {
-    const updatedItems = items.map((item) =>
-      item.id === id
-        ? { ...item, value: Math.max(0, item.value + increment) }
-        : item
-    );
-    dispatch(appActions.updateInventoryDetails({ room: updatedItems }));
-  };
+  const { items, updateItemCount } = useInventorySelection();
 
   return (
     <div className="p-4">
