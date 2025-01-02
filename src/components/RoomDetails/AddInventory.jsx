@@ -1,10 +1,10 @@
 import React, { useState, useEffect, memo } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import SearchBar from "../common/SearchBar";
+import SearchBar from "../shared/SearchBar";
 import useInventoryManagement from "../../hooks/InventoryManagementHook/useInventoryManagement";
 import { RemoveModal } from "../Modals/RemoveModal/RemoveModal";
-import LazyImage from "../common/LazyImage";
+import LazyImage from "../shared/LazyImage";
 
 const AddInventory = ({ onTotalCountChange, roomName }) => {
   const {
@@ -23,21 +23,18 @@ const AddInventory = ({ onTotalCountChange, roomName }) => {
   const [openModal, setOpenModal] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
 
-  // Load persisted state for the room on mount
   useEffect(() => {
     if (handleRoomChange) {
       handleRoomChange(roomName);
     }
   }, [handleRoomChange]);
 
-  // Update total count for the room whenever the count changes
   useEffect(() => {
     if (onTotalCountChange) {
       onTotalCountChange(getTotalCounts);
     }
   }, [getTotalCounts]);
 
-  // Open modal when trying to remove an item with count of 1
   const handleItemRemoveClick = (item) => {
     if (item.count === 1) {
       setItemToRemove(item);
@@ -59,7 +56,6 @@ const AddInventory = ({ onTotalCountChange, roomName }) => {
 
   return (
     <div className="w-full">
-      {/* Search Bar */}
       <SearchBar search={search} onChange={handleSearchChange} />
 
       {/* Category Tabs */}
@@ -79,24 +75,23 @@ const AddInventory = ({ onTotalCountChange, roomName }) => {
         ))}
       </div>
 
-      {/* Items Grid */}
+      {/* Inventory Grid */}
       <div className="grid grid-cols-2 gap-4">
         {filteredItems.map((item) => (
           <div
             key={item.name}
             className="bg-white rounded-md shadow-md p-0 flex flex-col"
           >
-            {/* Full-width Placeholder Image */}
             <div className="w-full h-24 bg-gray-200 rounded-t-md">
               <LazyImage
-                src={`/images/${item.image}`} // Actual image path
+                src={`/images/${item.image}`}
                 alt={item.name}
-                className="w-full h-full object-cover rounded-t-md" // Apply object-cover to ensure the image stays contained
-                placeholderSrc="/path/to/placeholder-image.jpg" // Fallback image
+                className="w-full h-full object-cover rounded-t-md"
+                placeholderSrc="/images/place-holder.jpg"
               />
             </div>
 
-            {/* Item Name and Buttons */}
+            {/* Inventory Name and Buttons */}
             <div className="flex items-center justify-between p-2 whitespace-nowrap">
               <h3 className="text-gray-700 font-bold text-xs truncate">
                 {item.name}
@@ -147,7 +142,6 @@ const AddInventory = ({ onTotalCountChange, roomName }) => {
   );
 };
 
-// Wrap the AddInventory component with React.memo to optimize rendering
 export default memo(AddInventory, (prevProps, nextProps) => {
   return (
     prevProps.filteredItems === nextProps.filteredItems &&

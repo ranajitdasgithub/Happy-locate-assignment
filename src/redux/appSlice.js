@@ -4,7 +4,7 @@ const appSlice = createSlice({
   name: "happy-locate-app",
   initialState: {
     inventoryDetails: {
-      id: "inventory-0",
+      id: "inventory-material",
       room: [
         { id: 0, name: "Rooms", value: 0, nodes: [] },
         { id: 1, name: "Kitchen", value: 0, nodes: [] },

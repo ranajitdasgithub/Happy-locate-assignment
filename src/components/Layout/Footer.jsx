@@ -1,5 +1,5 @@
 import React from "react";
-import { CustomButton } from "../common/CustomButton";
+import { CustomButton } from "../shared/CustomButton";
 import { InfoOutlined } from "@mui/icons-material";
 
 const Footer = ({ value, setOpen, onClick, loading }) => {

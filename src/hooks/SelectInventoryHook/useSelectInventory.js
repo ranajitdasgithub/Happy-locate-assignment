@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Custom hook for managing inventory page logic
 const useSelectInventory = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = useState("room");
 
-  // Handle API call to fetch inventory and navigate
   const handleContinueBtn = async () => {
     setLoading(true);
     try {
@@ -23,19 +21,17 @@ const useSelectInventory = () => {
       }
       const result = await response.json();
       if (result) {
-        navigate("/inventory"); // Navigate to the inventory page if the call is successful
+        navigate("/inventory");
       }
     } catch (error) {
       console.error("Error occurred during GET request:", error);
     } finally {
-      setLoading(false); // Stop loading after the operation completes
+      setLoading(false);
     }
   };
 
-  // Handle tab change
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
-    console.log("Selected Tab: ", tab); // Optional log or additional logic
   };
 
   return {

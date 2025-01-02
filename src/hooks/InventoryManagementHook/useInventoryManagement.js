@@ -1,6 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
 
-// Function to load inventory state with default values
 const loadInventoryState = () => {
   return {
     items: [

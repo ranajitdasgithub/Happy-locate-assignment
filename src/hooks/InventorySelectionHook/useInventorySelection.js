@@ -1,6 +1,5 @@
-// src/hooks/useInventorySelection.js
 import { useDispatch, useSelector } from "react-redux";
-import { appActions } from "../../redux/app-slice";
+import { appActions } from "../../redux/appSlice";
 
 const useInventorySelection = () => {
   const dispatch = useDispatch();

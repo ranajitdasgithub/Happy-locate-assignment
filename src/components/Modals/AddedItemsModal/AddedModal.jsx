@@ -1,7 +1,7 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React from "react";
 
-export const RemoveModal = ({ open, setOpen, onRemove }) => {
+export const AddedModal = ({ open, setOpen }) => {
   if (!open) return null;
 
   return (
@@ -12,22 +12,16 @@ export const RemoveModal = ({ open, setOpen, onRemove }) => {
             <CheckCircleIcon className="bg-white text-custom-blue text-[12px]" />
           </div>
           <span className="text-sm font-bold">
-            Are you sure you want to remove this item from inventory?
+            All inventory items Added Successfully !!!
           </span>
         </div>
 
         <div className="flex justify-end gap-4 mt-4">
           <button
-            className="text-blue-500 font-bold px-4 py-2 rounded-md"
-            onClick={onRemove}
-          >
-            Remove
-          </button>
-          <button
             className="bg-blue-500 text-white px-4 py-2 rounded-md"
             onClick={() => setOpen(false)}
           >
-            Cancel
+            Close
           </button>
         </div>
       </div>

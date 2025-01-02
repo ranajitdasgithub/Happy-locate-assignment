@@ -6,20 +6,16 @@ import { useSelector } from "react-redux";
 
 const RoomAccordionManager = ({ onRoomCountsUpdate }) => {
   const [expanded, setExpanded] = useState(false);
-
-  // Room Counts state
   const [roomCounts, setRoomCounts] = useState(() => {
     const savedCounts = sessionStorage.getItem("roomCounts");
     return savedCounts ? JSON.parse(savedCounts) : {};
   });
-
   const roomWiseData = useSelector((state) => state.app.inventoryDetails.room);
 
-  // Flatten the roomWiseData into individual entries based on the value
   const data = roomWiseData.flatMap((room) =>
     Array.from({ length: room.value }, (_, index) => ({
-      name: `${room.name} ${index + 1}`, // Create Room 1, Room 2, etc.
-      items: [], // Placeholder for items, adapt as needed
+      name: `${room.name} ${index + 1}`,
+      items: [],
     }))
   );
 
@@ -51,7 +47,6 @@ const RoomAccordionManager = ({ onRoomCountsUpdate }) => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <div className="flex w-full">
               <span className="font-semibold">{room.name}</span>
-              {/* Display the total count for the specific room */}
               <span className="text-blue-500 text-xs flex items-center ml-4">
                 {`Item Added ${roomCounts[room.name] || 0}`}
               </span>
@@ -62,7 +57,7 @@ const RoomAccordionManager = ({ onRoomCountsUpdate }) => {
               roomName={room.name}
               onTotalCountChange={(newTotal) =>
                 handleTotalCountChange(newTotal, room.name)
-              } // Pass room's name
+              }
             />
           </AccordionDetails>
         </Accordion>
