@@ -4,7 +4,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddInventory from "./AddInventory";
 import { useSelector } from "react-redux";
 
-const RoomAccordionManager = () => {
+const RoomAccordionManager = ({ onRoomCountsUpdate }) => {
   const [expanded, setExpanded] = useState(false);
 
   // Room Counts state
@@ -34,6 +34,7 @@ const RoomAccordionManager = () => {
         [roomName]: newTotal,
       };
       sessionStorage.setItem("roomCounts", JSON.stringify(updatedCounts));
+      onRoomCountsUpdate(updatedCounts);
       return updatedCounts;
     });
   };

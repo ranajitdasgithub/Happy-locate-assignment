@@ -7,7 +7,7 @@ const loadInventoryState = () => {
       {
         name: "Washing Machine",
         category: "Electrical Appliances",
-        count: 0,
+        count: 2,
         image: "washing-machine.jpg",
       },
       {
@@ -19,7 +19,7 @@ const loadInventoryState = () => {
       {
         name: "Refrigerator",
         category: "Electrical Appliances",
-        count: 0,
+        count: 4,
         image: "refrigirator.jpg",
       },
       { name: "Bed", category: "Furniture", count: 0, image: "bed.jpg" },

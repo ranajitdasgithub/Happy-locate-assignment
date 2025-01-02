@@ -7,6 +7,19 @@ import { useNavigate } from "react-router-dom";
 import RoomAccordionManager from "../components/RoomDetails/RoomAccordionManager";
 
 const AddInventoryPage = () => {
+  const [totalItemsCount, setTotalItemsCount] = useState(0);
+
+  const handleTotalItemsCount = (totalObj) => {
+    if (typeof totalObj !== "object" || totalObj === null) {
+      return;
+    }
+    const totalCount = Object.values(totalObj).reduce(
+      (sum, count) => sum + count,
+      0
+    );
+    setTotalItemsCount(totalCount || 0);
+  };
+  console.log(totalItemsCount, "totalitemcount");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -43,7 +56,7 @@ const AddInventoryPage = () => {
         {/* Scrollable Content */}
         <div className="overflow-y-auto flex-grow">
           {selectedTab === "room" ? (
-            <RoomAccordionManager />
+            <RoomAccordionManager onRoomCountsUpdate={handleTotalItemsCount} />
           ) : (
             <div className="p-4">
               <AddInventory />
@@ -52,7 +65,11 @@ const AddInventoryPage = () => {
         </div>
 
         {/* Sticky Footer */}
-        <Footer onClick={handleContinueBtn} value={13} loading={loading} />
+        <Footer
+          onClick={handleContinueBtn}
+          value={totalItemsCount}
+          loading={loading}
+        />
       </div>
     </div>
   );
