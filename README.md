@@ -6,23 +6,34 @@ Access the live view of the project [here](https://example.com).
 
 ## Project Screenshots
 
-### Select Inventory Page
-
-![Select Inventory Page](public/screenshot/selectInventory.png)
-
-### Add Inventory Page (Room Wise)
-
-![Add Inventory Page (Room Wise)](public/screenshot/addInventoryRoom.png)
-
-### Add Inventory Page (Categories Wise)
-
-![Add Inventory Page (Categories Wise)](public/screenshot/addInventoryCategory.png)
+<table>
+  <tr>
+    <td>
+      <img src="public/screenshot/selectInventory.png" alt="Select Inventory Page" width="600"/>
+    </td>
+    <td>
+      <img src="public/screenshot/addInventoryRoom.png" alt="Add Inventory Page (Room Wise)" width="600"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="public/screenshot/addInventoryCategory.png" alt="Add Inventory Page (Categories Wise)" width="600"/>
+    </td>
+    <td>
+      <img src="public/screenshot/removeModal.png" alt="Add Inventory Page Remove Modal" width="600"/>
+    </td>
+  </tr>
+</table>
 
 ## Setup Instructions
 
 ### 1. **Extract the Project**
 
-- Extract the provided zip file into your desired directory.
+- Extract the provided zip file into your desired directory or you can clone the repository using the following command:
+
+```bash
+git clone https://github.com/ranajitdasgithub/Happy-locate-assignment.git
+```
 
 ### 2. **Navigate to the Project Directory**
 
