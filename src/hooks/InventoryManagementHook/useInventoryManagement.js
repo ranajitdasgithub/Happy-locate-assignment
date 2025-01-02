@@ -1,44 +1,52 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 
-const loadInventoryState = () => {
-  return {
-    items: [
-      {
-        name: "Washing Machine",
-        category: "Electrical Appliances",
-        count: 2,
-        image: "washing-machine.jpg",
-      },
-      {
-        name: "Sofa Chair",
-        category: "Furniture",
-        count: 0,
-        image: "sofa.jpg",
-      },
-      {
-        name: "Refrigerator",
-        category: "Electrical Appliances",
-        count: 4,
-        image: "refrigirator.jpg",
-      },
-      { name: "Bed", category: "Furniture", count: 0, image: "bed.jpg" },
-      {
-        name: "Smart TV",
-        category: "Electronics",
-        count: 0,
-        image: "smart-tv.jpg",
-      },
-      { name: "Sofa Set", category: "Furniture", count: 0, image: "sofa.jpg" },
-    ],
-
-    search: "",
-    activeCategory: "All",
-    roomName: "",
-  };
+const defaultInventoryState = {
+  items: [
+    {
+      name: "Washing Machine",
+      category: "Electrical Appliances",
+      count: 0,
+      image: "washing-machine.jpg",
+    },
+    {
+      name: "Sofa Chair",
+      category: "Furniture",
+      count: 0,
+      image: "sofa-set.jpg",
+    },
+    {
+      name: "Refrigerator",
+      category: "Electrical Appliances",
+      count: 0,
+      image: "refrigerator.jpg",
+    },
+    { name: "Bed", category: "Furniture", count: 0, image: "bed.jpg" },
+    {
+      name: "Smart TV",
+      category: "Electronics",
+      count: 0,
+      image: "smart-tv.jpg",
+    },
+    {
+      name: "Sofa Set",
+      category: "Furniture",
+      count: 0,
+      image: "sofa.jpg",
+    },
+  ],
+  search: "",
+  activeCategory: "All",
 };
 
-const useInventoryManagement = () => {
-  const [inventoryState, setInventoryState] = useState(loadInventoryState);
+const loadRoomInventoryState = (roomName) => {
+  const savedState = sessionStorage.getItem(roomName);
+  return savedState ? JSON.parse(savedState) : defaultInventoryState;
+};
+
+const useInventoryManagement = (roomName) => {
+  const [inventoryState, setInventoryState] = useState(() =>
+    loadRoomInventoryState(roomName)
+  );
 
   const { items, search, activeCategory } = inventoryState;
 
@@ -51,47 +59,67 @@ const useInventoryManagement = () => {
     "Gardening",
   ];
 
-  const handleAdd = useCallback((name) => {
-    setInventoryState((prevState) => ({
-      ...prevState,
-      items: prevState.items.map((item) =>
-        item.name === name ? { ...item, count: item.count + 1 } : item
-      ),
-    }));
-  }, []);
+  // Save state for the current roomName
+  const updateSessionStorage = (newState) => {
+    sessionStorage.setItem(roomName, JSON.stringify(newState));
+  };
 
-  const handleRemove = useCallback((name) => {
-    setInventoryState((prevState) => ({
-      ...prevState,
-      items: prevState.items.map((item) =>
-        item.name === name
-          ? { ...item, count: Math.max(0, item.count - 1) }
-          : item
-      ),
-    }));
-  }, []);
+  const handleAdd = useCallback(
+    (name) => {
+      setInventoryState((prevState) => {
+        const newState = {
+          ...prevState,
+          items: prevState.items.map((item) =>
+            item.name === name ? { ...item, count: item.count + 1 } : item
+          ),
+        };
+        updateSessionStorage(newState);
+        return newState;
+      });
+    },
+    [roomName]
+  );
 
-  const handleCategoryChange = useCallback((category) => {
-    setInventoryState((prevState) => ({
-      ...prevState,
-      activeCategory: category,
-    }));
-  }, []);
+  const handleRemove = useCallback(
+    (name) => {
+      setInventoryState((prevState) => {
+        const newState = {
+          ...prevState,
+          items: prevState.items.map((item) =>
+            item.name === name
+              ? { ...item, count: Math.max(0, item.count - 1) }
+              : item
+          ),
+        };
+        updateSessionStorage(newState);
+        return newState;
+      });
+    },
+    [roomName]
+  );
 
-  const handleRoomChange = useCallback((roomName) => {
-    setInventoryState((prevState) => ({
-      ...prevState,
-      roomName: roomName,
-    }));
-  }, []);
+  const handleCategoryTabChange = useCallback(
+    (category) => {
+      setInventoryState((prevState) => {
+        const newState = { ...prevState, activeCategory: category };
+        updateSessionStorage(newState);
+        return newState;
+      });
+    },
+    [roomName]
+  );
 
-  const handleSearchChange = useCallback((e) => {
-    const searchValue = e.target.value;
-    setInventoryState((prevState) => ({
-      ...prevState,
-      search: searchValue,
-    }));
-  }, []);
+  const handleSearchChange = useCallback(
+    (e) => {
+      const searchValue = e.target.value;
+      setInventoryState((prevState) => {
+        const newState = { ...prevState, search: searchValue };
+        updateSessionStorage(newState);
+        return newState;
+      });
+    },
+    [roomName]
+  );
 
   const filteredItems = useMemo(() => {
     return items.filter(
@@ -116,6 +144,11 @@ const useInventoryManagement = () => {
     [items, search]
   );
 
+  useEffect(() => {
+    const savedState = loadRoomInventoryState(roomName);
+    setInventoryState(savedState);
+  }, [roomName]);
+
   return {
     filteredItems,
     search,
@@ -125,9 +158,8 @@ const useInventoryManagement = () => {
     handleRemove,
     getCategoryCount,
     handleSearchChange,
-    handleCategoryChange,
+    handleCategoryTabChange,
     getTotalCounts,
-    handleRoomChange,
   };
 };
 

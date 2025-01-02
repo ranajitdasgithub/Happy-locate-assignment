@@ -16,10 +16,10 @@ const AddInventory = ({ onTotalCountChange, roomName }) => {
     handleRemove,
     getCategoryCount,
     handleSearchChange,
-    handleCategoryChange,
+    handleCategoryTabChange,
     getTotalCounts,
     handleRoomChange,
-  } = useInventoryManagement();
+  } = useInventoryManagement(roomName);
   const [openModal, setOpenModal] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
 
@@ -68,7 +68,7 @@ const AddInventory = ({ onTotalCountChange, roomName }) => {
             } ${
               activeCategory === category ? "text-blue-500" : "text-gray-700"
             }`}
-            onClick={() => handleCategoryChange(category)}
+            onClick={() => handleCategoryTabChange(category)}
           >
             {category} {getCategoryCount(category)}
           </button>

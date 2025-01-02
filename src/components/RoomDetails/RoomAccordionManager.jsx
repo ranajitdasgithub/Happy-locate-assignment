@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const RoomAccordionManager = ({ onRoomCountsUpdate }) => {
   const [expanded, setExpanded] = useState(false);
   const [roomCounts, setRoomCounts] = useState(() => {
-    const savedCounts = sessionStorage.getItem("roomCounts");
+    const savedCounts = sessionStorage.getItem("ItemCounts");
     return savedCounts ? JSON.parse(savedCounts) : {};
   });
   const roomWiseData = useSelector((state) => state.app.inventoryDetails.room);
@@ -29,7 +29,7 @@ const RoomAccordionManager = ({ onRoomCountsUpdate }) => {
         ...prevCounts,
         [roomName]: newTotal,
       };
-      sessionStorage.setItem("roomCounts", JSON.stringify(updatedCounts));
+      sessionStorage.setItem("ItemCounts", JSON.stringify(updatedCounts));
       onRoomCountsUpdate(updatedCounts);
       return updatedCounts;
     });

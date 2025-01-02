@@ -2,7 +2,7 @@
 
 ## Live Demo
 
-Access the live view of the project [here](https://example.com).
+Access the live view of the project [here](https://happy-locate-five.vercel.app/).
 
 ## Project Screenshots
 
