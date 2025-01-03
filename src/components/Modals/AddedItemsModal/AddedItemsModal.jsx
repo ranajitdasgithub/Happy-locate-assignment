@@ -12,9 +12,9 @@ const AddedItemsModal = ({ open, onClose, items = [] }) => {
       <Box className="fixed inset-x-0 bottom-0 bg-white rounded-t-lg shadow-lg p-4 max-h-[70vh] w-full max-w-md m-auto">
         {/* Drag Indicator */}
         <div className="flex justify-center items-center mb-4">
-          <div className="w-10 h-1 rounded-full bg-gray-300" />
+          <div className="w-20 h-1 rounded-full bg-gray-300" />
         </div>
-
+        <h3 className="font-bold my-4 text-center">Added Items</h3>
         {/* Items List */}
         <div className="space-y-4 overflow-y-auto">
           {items.length > 0 ? (
