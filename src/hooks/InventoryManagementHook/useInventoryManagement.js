@@ -38,15 +38,16 @@ const defaultInventoryState = {
   activeCategory: "All",
 };
 
-const loadRoomInventoryState = (roomName) => {
-  const savedState = sessionStorage.getItem(roomName);
-  return savedState ? JSON.parse(savedState) : defaultInventoryState;
+const loadInventoryState = () => {
+  const savedState = sessionStorage.getItem("AddInventoryAllItems");
+  return savedState ? JSON.parse(savedState) : {};
 };
 
 const useInventoryManagement = (roomName) => {
-  const [inventoryState, setInventoryState] = useState(() =>
-    loadRoomInventoryState(roomName)
-  );
+  const [inventoryState, setInventoryState] = useState(() => {
+    const allStates = loadInventoryState();
+    return allStates[roomName] || defaultInventoryState;
+  });
 
   const { items, search, activeCategory } = inventoryState;
 
@@ -59,9 +60,11 @@ const useInventoryManagement = (roomName) => {
     "Gardening",
   ];
 
-  // Save state for the current roomName
+  // Save state for the given roomName in session storage
   const updateSessionStorage = (newState) => {
-    sessionStorage.setItem(roomName, JSON.stringify(newState));
+    const allStates = loadInventoryState();
+    allStates[roomName] = newState;
+    sessionStorage.setItem("AddInventoryAllItems", JSON.stringify(allStates));
   };
 
   const handleAdd = useCallback(
@@ -145,8 +148,10 @@ const useInventoryManagement = (roomName) => {
   );
 
   useEffect(() => {
-    const savedState = loadRoomInventoryState(roomName);
-    setInventoryState(savedState);
+    const allStates = loadInventoryState();
+    if (allStates[roomName]) {
+      setInventoryState(allStates[roomName]);
+    }
   }, [roomName]);
 
   return {

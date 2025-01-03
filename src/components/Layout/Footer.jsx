@@ -20,7 +20,7 @@ const Footer = ({ value, setOpen, onClick, loading }) => {
             <div
               className="w-[100%] sm:w-3/5 text-[14px] text-custom-blue cursor-pointer font-normal text-left pr-2"
               onClick={() => {
-                setOpen && setOpen(true);
+                setOpen && setOpen();
               }}
             >
               View&nbsp;{value}&nbsp;items

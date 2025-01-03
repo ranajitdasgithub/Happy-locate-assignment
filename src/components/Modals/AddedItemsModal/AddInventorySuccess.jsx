@@ -1,7 +1,7 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React from "react";
 
-export const AddedModal = ({ open, setOpen }) => {
+export const AddInventorySuccessModal = ({ open, setOpen }) => {
   if (!open) return null;
 
   return (
@@ -12,7 +12,8 @@ export const AddedModal = ({ open, setOpen }) => {
             <CheckCircleIcon className="bg-white text-custom-blue text-[12px]" />
           </div>
           <span className="text-sm font-bold">
-            All inventory items Added Successfully !!!
+            Success! All inventory items have been added. You can now proceed
+            with your next steps.
           </span>
         </div>
 
